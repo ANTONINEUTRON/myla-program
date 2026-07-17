@@ -1,6 +1,5 @@
 import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
-import { MylaPool } from "../target/types/myla_pool";
 import { assert } from "chai";
 import {
   PublicKey,
@@ -8,11 +7,12 @@ import {
   SystemProgram,
   LAMPORTS_PER_SOL,
 } from "@solana/web3.js";
+import { MylaProgram } from "../target/types/myla_program";
 
 describe("myla-program", () => {
   const provider = anchor.AnchorProvider.env();
   anchor.setProvider(provider);
-  const program = anchor.workspace.MylaPool as Program<MylaPool>;
+  const program = anchor.workspace.MylaProgram as Program<MylaProgram>;
 
   // Test accounts
   const oracle = Keypair.generate();
