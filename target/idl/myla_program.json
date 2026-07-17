@@ -1,0 +1,387 @@
+{
+    "version": "0.1.0",
+    "name": "myla_program",
+    "instructions": [
+        {
+            "name": "createPool",
+            "accounts": [
+                {
+                    "name": "creator",
+                    "isMut": true,
+                    "isSigner": true
+                },
+                {
+                    "name": "pool",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "oracle",
+                    "isMut": false,
+                    "isSigner": false
+                },
+                {
+                    "name": "commissionWallet",
+                    "isMut": false,
+                    "isSigner": false
+                },
+                {
+                    "name": "systemProgram",
+                    "isMut": false,
+                    "isSigner": false
+                }
+            ],
+            "args": [
+                {
+                    "name": "matchId",
+                    "type": "string"
+                },
+                {
+                    "name": "asset",
+                    "type": "string"
+                },
+                {
+                    "name": "strikeLevel",
+                    "type": "u16"
+                },
+                {
+                    "name": "strikeMinute",
+                    "type": "u8"
+                },
+                {
+                    "name": "deadline",
+                    "type": "i64"
+                },
+                {
+                    "name": "commissionRate",
+                    "type": "u16"
+                }
+            ]
+        },
+        {
+            "name": "placeBet",
+            "accounts": [
+                {
+                    "name": "user",
+                    "isMut": true,
+                    "isSigner": true
+                },
+                {
+                    "name": "pool",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "bet",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "vault",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "systemProgram",
+                    "isMut": false,
+                    "isSigner": false
+                }
+            ],
+            "args": [
+                {
+                    "name": "side",
+                    "type": "u8"
+                },
+                {
+                    "name": "amount",
+                    "type": "u64"
+                }
+            ]
+        },
+        {
+            "name": "resolvePool",
+            "accounts": [
+                {
+                    "name": "oracle",
+                    "isMut": true,
+                    "isSigner": true
+                },
+                {
+                    "name": "pool",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "vault",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "commissionWallet",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "systemProgram",
+                    "isMut": false,
+                    "isSigner": false
+                }
+            ],
+            "args": [
+                {
+                    "name": "actualValue",
+                    "type": "u16"
+                }
+            ]
+        },
+        {
+            "name": "claimWinnings",
+            "accounts": [
+                {
+                    "name": "user",
+                    "isMut": true,
+                    "isSigner": true
+                },
+                {
+                    "name": "pool",
+                    "isMut": false,
+                    "isSigner": false
+                },
+                {
+                    "name": "bet",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "vault",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "systemProgram",
+                    "isMut": false,
+                    "isSigner": false
+                }
+            ],
+            "args": []
+        },
+        {
+            "name": "refund",
+            "accounts": [
+                {
+                    "name": "user",
+                    "isMut": true,
+                    "isSigner": true
+                },
+                {
+                    "name": "pool",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "bet",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "vault",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "systemProgram",
+                    "isMut": false,
+                    "isSigner": false
+                }
+            ],
+            "args": []
+        }
+    ],
+    "accounts": [
+        {
+            "name": "Pool",
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "matchId",
+                        "type": "string"
+                    },
+                    {
+                        "name": "asset",
+                        "type": "string"
+                    },
+                    {
+                        "name": "strikeLevel",
+                        "type": "u16"
+                    },
+                    {
+                        "name": "strikeMinute",
+                        "type": "u8"
+                    },
+                    {
+                        "name": "deadline",
+                        "type": "i64"
+                    },
+                    {
+                        "name": "overTotal",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "underTotal",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "overCount",
+                        "type": "u32"
+                    },
+                    {
+                        "name": "underCount",
+                        "type": "u32"
+                    },
+                    {
+                        "name": "resolved",
+                        "type": "bool"
+                    },
+                    {
+                        "name": "winningSide",
+                        "type": {
+                            "option": "u8"
+                        }
+                    },
+                    {
+                        "name": "actualValue",
+                        "type": {
+                            "option": "u16"
+                        }
+                    },
+                    {
+                        "name": "commissionRate",
+                        "type": "u16"
+                    },
+                    {
+                        "name": "commissionWallet",
+                        "type": "publicKey"
+                    },
+                    {
+                        "name": "oracle",
+                        "type": "publicKey"
+                    },
+                    {
+                        "name": "bump",
+                        "type": "u8"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Bet",
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "pool",
+                        "type": "publicKey"
+                    },
+                    {
+                        "name": "user",
+                        "type": "publicKey"
+                    },
+                    {
+                        "name": "side",
+                        "type": "u8"
+                    },
+                    {
+                        "name": "amount",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "claimed",
+                        "type": "bool"
+                    },
+                    {
+                        "name": "bump",
+                        "type": "u8"
+                    }
+                ]
+            }
+        }
+    ],
+    "errors": [
+        {
+            "code": 6000,
+            "name": "DeadlineInPast",
+            "msg": "The deadline must be in the future"
+        },
+        {
+            "code": 6001,
+            "name": "InvalidCommissionRate",
+            "msg": "The commission rate must be between 0 and 10000 basis points (100%)"
+        },
+        {
+            "code": 6002,
+            "name": "PoolAlreadyResolved",
+            "msg": "The pool has already been resolved"
+        },
+        {
+            "code": 6003,
+            "name": "DeadlinePassed",
+            "msg": "The betting deadline has passed"
+        },
+        {
+            "code": 6004,
+            "name": "StakeTooSmall",
+            "msg": "The minimum stake is 0.01 SOL (10,000,000 lamports)"
+        },
+        {
+            "code": 6005,
+            "name": "InvalidSide",
+            "msg": "Invalid side: must be 0 (Over) or 1 (Under)"
+        },
+        {
+            "code": 6006,
+            "name": "UnauthorizedOracle",
+            "msg": "Only the authorized oracle can resolve this pool"
+        },
+        {
+            "code": 6007,
+            "name": "DeadlineNotReached",
+            "msg": "The pool deadline has not passed yet"
+        },
+        {
+            "code": 6008,
+            "name": "PoolNotResolved",
+            "msg": "The pool has not been resolved yet"
+        },
+        {
+            "code": 6009,
+            "name": "NotAWinner",
+            "msg": "Your bet is on the losing side"
+        },
+        {
+            "code": 6010,
+            "name": "AlreadyClaimed",
+            "msg": "You have already claimed your winnings"
+        },
+        {
+            "code": 6011,
+            "name": "RefundNotEligible",
+            "msg": "The pool is not eligible for a refund"
+        },
+        {
+            "code": 6012,
+            "name": "ArithmeticOverflow",
+            "msg": "Arithmetic overflow"
+        },
+        {
+            "code": 6013,
+            "name": "MatchIdTooLong",
+            "msg": "Match ID is too long (max 32 characters)"
+        },
+        {
+            "code": 6014,
+            "name": "AssetTooLong",
+            "msg": "Asset name is too long (max 16 characters)"
+        }
+    ]
+}
